@@ -343,15 +343,16 @@
 }
 
 /* ── Loading (loader): BeautifulUI's pixel loaders replace the pending row icon ── */
-/* ::before is the dim 3×3 grid and never repaints. ::after is the lit pixels, a
-   separate layer that moves only by transform and fades only by opacity, so the
-   compositor runs the loop without a main-thread style or paint per frame. */
-@keyframes bui-drive {
-  0% { opacity: 0; transform: translateX(0); }
-  12%, 34% { opacity: 1; transform: translateX(0); }
-  35%, 54% { opacity: 1; transform: translateX(5px); }
-  55%, 70% { opacity: 1; transform: translateX(10px); }
-  86%, 100% { opacity: 0; transform: translateX(10px); }
+/* Orbit and coins draw the dim 3×3 grid in ::before, which never repaints, and orbit
+   moves its lit pixel in ::after by transform only. Drive and dots paint the dim grid
+   as the title's background and light each of the four phases (a–d, 90ms apart) in
+   its own layer: the title's ::before (in flow, holding the icon's slot) and ::after,
+   and the label span's ::before and ::after. A layer fades only by opacity, and
+   opacity p over the 15% base gives alpha 0.15 + 0.85p, so each cell follows
+   BeautifulUI's per-cell keyframes and easing while the compositor runs the loop. */
+@keyframes bui-cell {
+  0%, 62%, 100% { opacity: 0; }
+  18%, 42% { opacity: 1; }
 }
 @keyframes bui-orbit {
   0%, 12.4% { transform: translate(0, 0); }
@@ -368,6 +369,7 @@
   display: none;
 }
 :root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child) {
+  --bui-px-on: var(--bui-ink);
   position: relative;
 }
 :root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
@@ -389,49 +391,111 @@
   pointer-events: none;
   will-change: transform, opacity;
 }
-/* Drive (default): a lit column sweeps left to right across the grid. */
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::before,
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  pointer-events: none;
+  will-change: opacity;
+}
+/* Drive (default): cells light in diagonal waves sweeping left to right. */
+:root:not([data-bui-loader]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child),
+:root[data-bui-loader="drive"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child),
+:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child) {
+  background:
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px calc(50% - 5px) / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px calc(50% - 5px) / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px calc(50% - 5px) / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 50% / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 50% / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 50% / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px calc(50% + 5px) / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px calc(50% + 5px) / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px calc(50% + 5px) / 4px 4px no-repeat;
+}
 :root:not([data-bui-loader]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before,
 :root[data-bui-loader="drive"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before,
 :root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
   background:
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 10px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 10px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 10px / 4px 4px no-repeat;
+    linear-gradient(var(--bui-px-on) 0 0) 0px 5px / 4px 4px no-repeat;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 0ms infinite;
 }
 :root:not([data-bui-loader]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after,
 :root[data-bui-loader="drive"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after,
 :root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
   background:
     linear-gradient(var(--bui-px-on) 0 0) 0px 0px / 4px 4px no-repeat,
-    linear-gradient(var(--bui-px-on) 0 0) 0px 5px / 4px 4px no-repeat,
+    linear-gradient(var(--bui-px-on) 0 0) 5px 5px / 4px 4px no-repeat,
     linear-gradient(var(--bui-px-on) 0 0) 0px 10px / 4px 4px no-repeat;
-  animation: bui-drive 650ms linear infinite;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 90ms infinite;
 }
-/* Dots: the same sweep with round pixels. */
+:root:not([data-bui-loader]) [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::before,
+:root[data-bui-loader="drive"] [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::before,
+:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::before {
+  background:
+    linear-gradient(var(--bui-px-on) 0 0) 5px 0px / 4px 4px no-repeat,
+    linear-gradient(var(--bui-px-on) 0 0) 10px 5px / 4px 4px no-repeat,
+    linear-gradient(var(--bui-px-on) 0 0) 5px 10px / 4px 4px no-repeat;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 180ms infinite;
+}
+:root:not([data-bui-loader]) [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::after,
+:root[data-bui-loader="drive"] [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::after,
+:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::after {
+  background:
+    linear-gradient(var(--bui-px-on) 0 0) 10px 0px / 4px 4px no-repeat,
+    linear-gradient(var(--bui-px-on) 0 0) 10px 10px / 4px 4px no-repeat;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 270ms infinite;
+}
+/* Dots: the same waves with round pixels. */
+:root[data-bui-loader="dots"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child) {
+  background:
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px calc(50% - 5px) / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px calc(50% - 5px) / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px calc(50% - 5px) / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 50% / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 50% / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 50% / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px calc(50% + 5px) / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px calc(50% + 5px) / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px calc(50% + 5px) / 4px 4px no-repeat;
+}
 :root[data-bui-loader="dots"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
   background:
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 0px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 0px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 0px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 5px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 5px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 5px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 10px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 10px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 10px / 4px 4px no-repeat;
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 5px / 4px 4px no-repeat;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 0ms infinite;
 }
 :root[data-bui-loader="dots"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
   background:
     radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 0px / 4px 4px no-repeat,
-    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 5px / 4px 4px no-repeat,
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 5px 5px / 4px 4px no-repeat,
     radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 10px / 4px 4px no-repeat;
-  animation: bui-drive 650ms linear infinite;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 90ms infinite;
+}
+:root[data-bui-loader="dots"] [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::before {
+  background:
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 5px 0px / 4px 4px no-repeat,
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 10px 5px / 4px 4px no-repeat,
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 5px 10px / 4px 4px no-repeat;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 180ms infinite;
+}
+:root[data-bui-loader="dots"] [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::after {
+  background:
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 10px 0px / 4px 4px no-repeat,
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 10px 10px / 4px 4px no-repeat;
+  opacity: 0;
+  animation: bui-cell 650ms ease-in-out 270ms infinite;
 }
 /* Orbit: one lit pixel walks the edge; the centre stays dim. */
 :root[data-bui-loader="orbit"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
@@ -877,6 +941,10 @@ ul)>li+li:before {
   }
   [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
     content: none;
+  }
+  [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::before,
+  [data-timeline-row-list] [data-timeline-row-title] > span:has(> .animate-shine:first-child)::after {
+    animation: none !important;
   }
   section[data-testid="approval-banner"],
   section[data-testid="user-question-banner"] {
