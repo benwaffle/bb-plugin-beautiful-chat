@@ -29,7 +29,6 @@
 
 @keyframes bui-fade-in { from { opacity: 0; } }
 @keyframes bui-fade-up { from { opacity: 0; transform: translateY(8px); } }
-@keyframes bui-shimmer-text { from { background-position: 150% 0; } to { background-position: -50% 0; } }
 
 /* ── Prompt bar (promptBar): raised field, 28px controls, filled send ─────────── */
 :root:not([data-bui-off~="prompt"]) [data-app-composer] form[data-promptbox] {
@@ -344,33 +343,32 @@
 }
 
 /* ── Loading (loader): BeautifulUI's pixel loaders replace the pending row icon ── */
-@property --bui-px-a { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-px-b { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-px-c { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-px-d { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-0 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-1 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-2 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-3 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-4 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-5 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-6 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@property --bui-orb-7 { syntax: "<number>"; inherits: false; initial-value: 0.15; }
-@keyframes bui-px-a { 0%, 62%, 100% { --bui-px-a: 0.15; } 18%, 42% { --bui-px-a: 1; } }
-@keyframes bui-px-b { 0%, 62%, 100% { --bui-px-b: 0.15; } 18%, 42% { --bui-px-b: 1; } }
-@keyframes bui-px-c { 0%, 62%, 100% { --bui-px-c: 0.15; } 18%, 42% { --bui-px-c: 1; } }
-@keyframes bui-px-d { 0%, 62%, 100% { --bui-px-d: 0.15; } 18%, 42% { --bui-px-d: 1; } }
-@keyframes bui-orb-0 { 0%, 62%, 100% { --bui-orb-0: 0.15; } 18%, 42% { --bui-orb-0: 1; } }
-@keyframes bui-orb-1 { 0%, 62%, 100% { --bui-orb-1: 0.15; } 18%, 42% { --bui-orb-1: 1; } }
-@keyframes bui-orb-2 { 0%, 62%, 100% { --bui-orb-2: 0.15; } 18%, 42% { --bui-orb-2: 1; } }
-@keyframes bui-orb-3 { 0%, 62%, 100% { --bui-orb-3: 0.15; } 18%, 42% { --bui-orb-3: 1; } }
-@keyframes bui-orb-4 { 0%, 62%, 100% { --bui-orb-4: 0.15; } 18%, 42% { --bui-orb-4: 1; } }
-@keyframes bui-orb-5 { 0%, 62%, 100% { --bui-orb-5: 0.15; } 18%, 42% { --bui-orb-5: 1; } }
-@keyframes bui-orb-6 { 0%, 62%, 100% { --bui-orb-6: 0.15; } 18%, 42% { --bui-orb-6: 1; } }
-@keyframes bui-orb-7 { 0%, 62%, 100% { --bui-orb-7: 0.15; } 18%, 42% { --bui-orb-7: 1; } }
+/* ::before is the dim 3×3 grid and never repaints. ::after is the lit pixels, a
+   separate layer that moves only by transform and fades only by opacity, so the
+   compositor runs the loop without a main-thread style or paint per frame. */
+@keyframes bui-drive {
+  0% { opacity: 0; transform: translateX(0); }
+  12%, 34% { opacity: 1; transform: translateX(0); }
+  35%, 54% { opacity: 1; transform: translateX(5px); }
+  55%, 70% { opacity: 1; transform: translateX(10px); }
+  86%, 100% { opacity: 0; transform: translateX(10px); }
+}
+@keyframes bui-orbit {
+  0%, 12.4% { transform: translate(0, 0); }
+  12.5%, 24.9% { transform: translate(5px, 0); }
+  25%, 37.4% { transform: translate(10px, 0); }
+  37.5%, 49.9% { transform: translate(10px, 5px); }
+  50%, 62.4% { transform: translate(10px, 10px); }
+  62.5%, 74.9% { transform: translate(5px, 10px); }
+  75%, 87.4% { transform: translate(0, 10px); }
+  87.5%, 100% { transform: translate(0, 5px); }
+}
 
 :root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child) > svg {
   display: none;
+}
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child) {
+  position: relative;
 }
 :root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
   --bui-px-on: var(--bui-ink);
@@ -379,69 +377,84 @@
   width: 14px;
   height: 14px;
 }
-/* Drive (default): square pixels sweep diagonally. */
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+  --bui-px-on: var(--bui-ink);
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+/* Drive (default): a lit column sweeps left to right across the grid. */
 :root:not([data-bui-loader]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before,
 :root[data-bui-loader="drive"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before,
 :root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
   background:
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-b) * 100%), transparent) 0 0) 0px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-c) * 100%), transparent) 0 0) 5px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-d) * 100%), transparent) 0 0) 10px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-a) * 100%), transparent) 0 0) 0px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-b) * 100%), transparent) 0 0) 5px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-c) * 100%), transparent) 0 0) 10px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-b) * 100%), transparent) 0 0) 0px 10px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-c) * 100%), transparent) 0 0) 5px 10px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-d) * 100%), transparent) 0 0) 10px 10px / 4px 4px no-repeat;
-  animation:
-    bui-px-a 650ms ease-in-out 0ms infinite,
-    bui-px-b 650ms ease-in-out 90ms infinite,
-    bui-px-c 650ms ease-in-out 180ms infinite,
-    bui-px-d 650ms ease-in-out 270ms infinite;
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 0px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 0px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 0px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 5px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 5px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 5px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 10px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 10px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 10px / 4px 4px no-repeat;
+}
+:root:not([data-bui-loader]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after,
+:root[data-bui-loader="drive"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after,
+:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+  background:
+    linear-gradient(var(--bui-px-on) 0 0) 0px 0px / 4px 4px no-repeat,
+    linear-gradient(var(--bui-px-on) 0 0) 0px 5px / 4px 4px no-repeat,
+    linear-gradient(var(--bui-px-on) 0 0) 0px 10px / 4px 4px no-repeat;
+  animation: bui-drive 650ms linear infinite;
 }
 /* Dots: the same sweep with round pixels. */
 :root[data-bui-loader="dots"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
   background:
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-b) * 100%), transparent) 90%, transparent) 0px 0px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-c) * 100%), transparent) 90%, transparent) 5px 0px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-d) * 100%), transparent) 90%, transparent) 10px 0px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-a) * 100%), transparent) 90%, transparent) 0px 5px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-b) * 100%), transparent) 90%, transparent) 5px 5px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-c) * 100%), transparent) 90%, transparent) 10px 5px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-b) * 100%), transparent) 90%, transparent) 0px 10px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-c) * 100%), transparent) 90%, transparent) 5px 10px / 4px 4px no-repeat,
-    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) calc(var(--bui-px-d) * 100%), transparent) 90%, transparent) 10px 10px / 4px 4px no-repeat;
-  animation:
-    bui-px-a 650ms ease-in-out 0ms infinite,
-    bui-px-b 650ms ease-in-out 90ms infinite,
-    bui-px-c 650ms ease-in-out 180ms infinite,
-    bui-px-d 650ms ease-in-out 270ms infinite;
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 0px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 0px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 0px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 5px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 5px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 5px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 10px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 10px / 4px 4px no-repeat,
+    radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 10px / 4px 4px no-repeat;
+}
+:root[data-bui-loader="dots"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+  background:
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 0px / 4px 4px no-repeat,
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 5px / 4px 4px no-repeat,
+    radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 10px / 4px 4px no-repeat;
+  animation: bui-drive 650ms linear infinite;
 }
 /* Orbit: one lit pixel walks the edge; the centre stays dim. */
 :root[data-bui-loader="orbit"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
   background:
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-0) * 100%), transparent) 0 0) 0px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-1) * 100%), transparent) 0 0) 5px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-2) * 100%), transparent) 0 0) 10px 0px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-7) * 100%), transparent) 0 0) 0px 5px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 0px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 0px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 0px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 5px / 4px 4px no-repeat,
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 7%, transparent) 0 0) 5px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-3) * 100%), transparent) 0 0) 10px 5px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-6) * 100%), transparent) 0 0) 0px 10px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-5) * 100%), transparent) 0 0) 5px 10px / 4px 4px no-repeat,
-    linear-gradient(color-mix(in oklch, var(--bui-px-on) calc(var(--bui-orb-4) * 100%), transparent) 0 0) 10px 10px / 4px 4px no-repeat;
-  animation:
-    bui-orb-0 950ms ease-in-out 0ms infinite,
-    bui-orb-1 950ms ease-in-out 110ms infinite,
-    bui-orb-2 950ms ease-in-out 220ms infinite,
-    bui-orb-3 950ms ease-in-out 330ms infinite,
-    bui-orb-4 950ms ease-in-out 440ms infinite,
-    bui-orb-5 950ms ease-in-out 550ms infinite,
-    bui-orb-6 950ms ease-in-out 660ms infinite,
-    bui-orb-7 950ms ease-in-out 770ms infinite;
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 5px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 10px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 10px / 4px 4px no-repeat,
+    linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 10px / 4px 4px no-repeat;
+}
+:root[data-bui-loader="orbit"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+  background: linear-gradient(var(--bui-px-on) 0 0) 0px 0px / 4px 4px no-repeat;
+  animation: bui-orbit 950ms linear infinite;
 }
 
 /* Coins: Originkit's ring of tumbling coins, painted by coins-worklet.ts. One loop
-   (10.472s) turns the ring once and tumbles each coin twice. */
+   (10.472s) turns the ring once and tumbles each coin twice. The worklet repaints
+   the icon on the main thread every frame, so coins is opt-in (`loader` defaults
+   to drive). */
 @property --bui-coin-t { syntax: "<number>"; inherits: false; initial-value: 0; }
 @property --bui-coin-color { syntax: "<color>"; inherits: false; initial-value: #fff; }
 @keyframes bui-coin-t { to { --bui-coin-t: 1; } }
@@ -450,24 +463,28 @@
   background: paint(bui-coins);
   animation: bui-coin-t 10.472s linear infinite;
 }
+:root[data-bui-loader="coins"][data-bui-coins-ready] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+  content: none;
+}
 
 /* ── Shimmer (shimmer): brighter, faster band on pending labels ─────────────── */
-/* BB used to shine `.animate-shine` with a text-clipped gradient. It now uses an
-   APNG mask over the whole box plus `-webkit-text-fill-color`. A background
-   gradient on that mask paints a gray pill instead of a band through the
-   glyphs, so drop the mask and clip BeautifulUI's band to the text. */
+/* BB shines `.animate-shine` with an animated APNG alpha mask, which Chromium
+   advances on the compositor. BeautifulUI's band is a `background-position` sweep
+   of a text-clipped gradient, which repaints on the main thread every frame. Keep
+   BB's mechanism and swap in a mask drawing BeautifulUI's band: dim `--bui-ink-3`
+   edges, full `--bui-ink` at the peak, 1.4s per pass.
+   `scripts/generate-shimmer-mask.mjs` writes assets/shimmer-sweep.png and prints
+   this data URI. Unlayered rules beat BB's `@layer utilities`, including its rule
+   that drops the mask inside hidden hosts, so that rule is repeated here. */
 @media (prefers-reduced-motion: no-preference) {
   :root:not([data-bui-off~="shimmer"]) #thread-detail-timeline-panel .animate-shine {
+    -webkit-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAACCAYAAACQRtQYAAAACGFjVEwAAAAqAAAAAAI897UAAAAaZmNUTAAAAAAAAACAAAAAAgAAAAAAAAAAAAEAHgAAHd4JDQAAABhJREFUeNpj/P//fxrDKBixgGk0CEY2AACX/QNnWERAnAAAABpmY1RMAAAAAQAAAIAAAAACAAAAAAAAAAAAAQAeAACGrePZAAAAHGZkQVQAAAACeNpj/P//fxrDKBixgGk0CEY2AACX/QNnfrrTVAAAABpmY1RMAAAAAwAAAIAAAAACAAAAAAAAAAAAAQAeAABrOzAwAAAAHGZkQVQAAAAEeNpj/P//fxrDKBixgGk0CEY2AACX/QNnFWG/8gAAABpmY1RMAAAABQAAAIAAAAACAAAAAAAAAAAAAQAeAACG8UJKAAAAHGZkQVQAAAAGeNpj/P//fxrDKBixgGk0CEY2AACX/QNnhQeZrwAAABpmY1RMAAAABwAAAIAAAAACAAAAAAAAAAAAAQAeAABrZ5GjAAAAHGZkQVQAAAAIeNpj/P//fxrDKBixgGk0CEY2AACX/QNnwtdmvgAAABpmY1RMAAAACQAAAIAAAAACAAAAAAAAAAAAAQAeAACGFKD/AAAAI2ZkQVQAAAAKeNpj/P//fzkDA8MfNPyfYRSMCMA0GgQjGwAAU90IZ5BSIRgAAAAaZmNUTAAAAAsAAACAAAAAAgAAAAAAAAAAAAEAHgAAa4JzFgAAACNmZEFUAAAADHjaY/z///8EBgaGP0TifwyjYFgBptEgGNkAAIBKDmfzFGcrAAAAGmZjVEwAAAANAAAAgAAAAAIAAAAAAAAAAAABAB4AAIZIAWwAAAAjZmRBVAAAAA542mP8////CgYGhj8U4n8Mo2BIAqbRIBjZAAAe4xRnDymtewAAABpmY1RMAAAADwAAAIAAAAACAAAAAAAAAAAAAQAeAABr3tKFAAAAJGZkQVQAAAAQeNpj/P///wEGBoY/ZOC/RKoZBYMYMI0GwcgGAC/RGmfFTNuQAAAAGmZjVEwAAAARAAAAgAAAAAIAAAAAAAAAAAABAB4AAIffZZUAAAAjZmRBVAAAABJ42mP8////TQYGhj90xn8ZRsGgAEyjQTCyAQCzHCBnbEJ2cgAAABpmY1RMAAAAEwAAAIAAAAACAAAAAAAAAAAAAQAeAABqSbZ8AAAAI2ZkQVQAAAAUeNpj/P///0cGBoY/gwT/ZRgFdAVMo0EwsgEAqG8mZ5uj8DQAAAAaZmNUTAAAABUAAACAAAAAAgAAAAAAAAAAAAEAHgAAh4PEBgAAAChmZEFUAAAAFnjaY/z///9XBgYGFigGgT9UxH+paNYooAFgGg2CkQ0ALQYpZ6NPgLQAAAAaZmNUTAAAABcAAACAAAAAAgAAAAAAAAAAAAEAHgAAahUX7wAAAClmZEFUAAAAGHjaY/z///9dBgYGFjTMjMZnAuI/gxSPAgoA02gQjGwAAKkiKWerzAHAAAAAGmZjVEwAAAAZAAAAgAAAAAIAAAAAAAAAAAABAB4AAIdmJrMAAAArZmRBVAAAABp42mP8////EQYGBhYyMRMQ/xkk+C8a/z/DKCAImEaDYGQDAEjeKmdTDDoVAAAAGmZjVEwAAAAbAAAAgAAAAAIAAAAAAAAAAAABAB4AAGrw9VoAAAAtZmRBVAAAABx42mP8////GgYGBhYqYyYg/kMk/kuCWmrg/wyjAA6YRoNgZAMAqIIqZ8DMtGsAAAAaZmNUTAAAAB0AAACAAAAAAgAAAAAAAAAAAAEAHgAAhzqHIAAAAChmZEFUAAAAHnjaY/z///8UBgYGFjIwM5n6/gxS/J9hBAImhlEwogEABY0qZ3xaHdwAAAAaZmNUTAAAAB8AAACAAAAAAgAAAAAAAAAAAAEAHgAAaqxUyQAAAChmZEFUAAAAIHjaY/z//381AwMDyyDAf+iA/5Kh5x/DMAZMDKNgRAMAYDUqZ3r2oLkAAAAaZmNUTAAAACEAAACAAAAAAgAAAAAAAAAAAAEAHgAAhEjvQQAAACxmZEFUAAAAInjaY/z//38aAwMDIxCzDFL8B4j/QunBhP8xDAPAxDAKRjQAALkNKmfPPad7AAAAGmZjVEwAAAAjAAAAgAAAAAIAAAAAAAAAAAABAB4AAGnePKgAAAAvZmRBVAAAACR42mP8//9/GgNuwAjELBRgZgr148P/gPjPIMT/GIYQYGIYBSMaAAAQiCpnsQIhyQAAABpmY1RMAAAAJQAAAIAAAAACAAAAAAAAAAAAAQAeAACEFE7SAAAAK2ZkQVQAAAAmeNpj/P//fxoDeYBlkOJ/QPyHQvyXCmZgM3PQASaGUTCiAQBoYCpnZADfawAAABpmY1RMAAAAJwAAAIAAAAACAAAAAAAAAAAAAQAeAABpgp07AAAAKWZkQVQAAAAoeNpj/P//fxoDdQHLAGFmAvIg8GcQ4r8MAwiYGEbBiAYAqhspZ3+UcLgAAAAaZmNUTAAAACkAAACAAAAAAgAAAAAAAAAAAAEAHgAAhPGsZwAAACxmZEFUAAAAKnjaY/z//38aA30ACw7MjEeOHhgE/gwg/otHjuaAiWEUjGgAABmmKWcYP4BvAAAAGmZjVEwAAAArAAAAgAAAAAIAAAAAAAAAAAABAB4AAGlnf44AAAArZmRBVAAAACx42mP8//9/GsPAAmYgZhmEGAT+4MF/CcjTElMNMDGMghENAImyKWdh21tpAAAAGmZjVEwAAAAtAAAAgAAAAAIAAAAAAAAAAAABAB4AAIStDfQAAAAqZmRBVAAAAC542mP8//9/GsPgBMxAzEJlTA0zmYD4zyDFJAMmhlEwogEA+VIpZzep1JgAAAAaZmNUTAAAAC8AAACAAAAAAgAAAAAAAAAAAAEAHgAAaTveHQAAACtmZEFUAAAAMHjaY/z//38aw9ACTEDMMggxyF1/aIT/Uqj/P77AHAUjGAAAgy8qZ0Q3BucAAAAaZmNUTAAAADEAAACAAAAAAgAAAAAAAAAAAAEAHgAAhTppDQAAACdmZEFUAAAAMnjaY/z//38aw/AATEDMMsgwM5T+M0jxfyaGUTCiAQDbSypnz6jMaAAAABpmY1RMAAAAMwAAAIAAAAACAAAAAAAAAAAAAQAeAABorLrkAAAAKGZkQVQAAAA0eNpj/P//fxrD8AZMQMxCImYmQw85+M9AYyaGUTCiAQCjLCR8vZNPvAAAABpmY1RMAAAANQAAAIAAAAACAAAAAAAAAAAAAQAeAACFZsieAAAAJmZkQVQAAAA2eNpj/P//fxrDyASMQMwySPEfMvBfcvQxMYyCEQ0AAUQelSihTj8AAAAaZmNUTAAAADcAAACAAAAAAgAAAAAAAAAAAAEAHgAAaPAbdwAAACpmZEFUAAAAOHjaY/z//38awyhABoxAzEJHzEyC2n9A/IeamGk0vkc2AADq+xitwP0hvwAAABpmY1RMAAAAOQAAAIAAAAACAAAAAAAAAAAAAQAeAACFgyorAAAAK2ZkQVQAAAA6eNpj/P//fxrDKCAGMAIxCxJmRuMPJP4HxH/IwUyj8TqyAQBiKBLFOBLQ1AAAABpmY1RMAAAAOwAAAIAAAAACAAAAAAAAAAAAAQAeAABoFfnCAAAAKGZkQVQAAAA8eNpj/P//fxrDKKAUsAxS/A+I/yDhv2j8P0yjcTeyAQBpdwzeWJE3eQAAABpmY1RMAAAAPQAAAIAAAAACAAAAAAAAAAAAAQAeAACF34u4AAAAKGZkQVQAAAA+eNpj/P//fxrDKKAVYKESZqaiWSxQt/0BYabROBrZAADyDgX2/CUOFQAAABpmY1RMAAAAPwAAAIAAAAACAAAAAAAAAAAAAQAeAABoSVhRAAAAIWZkQVQAAABAeNpj/P//fxrDKKA3YAZilsGAmUbjYmQDANPKA/L9VywQAAAAGmZjVEwAAABBAAAAgAAAAAIAAAAAAAAAAAABAB4AAINn+ukAAAAhZmRBVAAAAEJ42mP8//9/GsMoGCyAGYhZ6ImZRsN8ZAMAl+ID2vvHRqoAAAAaZmNUTAAAAEMAAACAAAAAAgAAAAAAAAAAAAEAHgAAbvEpAAAAACVmZEFUAAAARHjaY/z//38awygY7IAZiFkIYGLUYGCm0bAd2QAAXAQDwUWKPOkAAAAaZmNUTAAAAEUAAACAAAAAAgAAAAAAAAAAAAEAHgAAgztbegAAACFmZEFUAAAARnjaY/z//38awygYqoAJiFkowUyjYTiyAQAkkAOpu9/VqwAAABpmY1RMAAAARwAAAIAAAAACAAAAAAAAAAAAAQAeAABurYiTAAAAIWZkQVQAAABIeNpj/P//fxrDKBhugAmIWYjBTKNhNbIBAO9xA5G82tBAAAAAGmZjVEwAAABJAAAAgAAAAAIAAAAAAAAAAAABAB4AAIPeuc8AAAAhZmRBVAAAAEp42mP8//9/GsMoGCmAEYhZkDHTaJiMbAAAuo8DeDOmToQAAAAaZmNUTAAAAEsAAACAAAAAAgAAAAAAAAAAAAEAHgAAbkhqJgAAABxmZEFUAAAATHjaY/z//38awygYsYBpNAhGNgAAl/0DZ4JHt7wAAAAaZmNUTAAAAE0AAACAAAAAAgAAAAAAAAAAAAEAHgAAg4IYXAAAABxmZEFUAAAATnjaY/z//38awygYsYBpNAhGNgAAl/0DZxIhkeEAAAAaZmNUTAAAAE8AAACAAAAAAgAAAAAAAAAAAAEAHgAAbhTLtQAAABxmZEFUAAAAUHjaY/z//38awygYsYBpNAhGNgAAl/0DZw3mSZ4AAAAaZmNUTAAAAFEAAACAAAAAAgAAAAAAAAAAAAEAHgAAghV8pQAAABxmZEFUAAAAUnjaY/z//38awygYsYBpNAhGNgAAl/0DZ52Ab8MAAAAASUVORK5CYII=");
+    mask-image: url("data:image/png;base64,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");
+    -webkit-text-fill-color: var(--bui-ink);
+  }
+  :root:not([data-bui-off~="shimmer"]) #thread-detail-timeline-panel :is([inert], [aria-hidden="true"]) .animate-shine {
     -webkit-mask-image: none;
     mask-image: none;
-    will-change: auto;
-    background-image: linear-gradient(90deg, var(--bui-ink-3) 35%, var(--bui-ink) 50%, var(--bui-ink-3) 65%);
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    animation: bui-shimmer-text 1.4s linear infinite;
   }
 }
 
@@ -863,6 +880,9 @@ ul)>li+li:before {
   }
   [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
     animation: none !important;
+  }
+  [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+    content: none;
   }
   section[data-testid="approval-banner"],
   section[data-testid="user-question-banner"] {
