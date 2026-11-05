@@ -8,6 +8,7 @@ import { rootAttributes } from "./settings";
 import { registerCoinsWorklet } from "./coins-worklet";
 import { mountSpatialTooltips } from "./spatial-tooltip";
 import { mountPhaseSync } from "./phase-sync";
+import { mountRunState } from "./run-state";
 
 const ROOT_ATTRIBUTES = ["data-bui-loader", "data-bui-chips", "data-bui-off"];
 
@@ -27,6 +28,9 @@ function BeautifulChatStyles() {
   }, [isLoading, loader, chips, offList]);
 
   useEffect(() => mountPhaseSync(), []);
+
+  const runState = !off.includes("caret") || !off.includes("minimize");
+  useEffect(() => (runState ? mountRunState() : undefined), [runState]);
 
   const tooltips = !off.includes("actions");
   useEffect(() => (tooltips ? mountSpatialTooltips() : undefined), [tooltips]);

@@ -121,7 +121,7 @@
     box-shadow: none;
   }
   :root:not([data-bui-off~="prompt"]) [data-follow-up-composer-footer],
-  :root:not([data-bui-off~="prompt"]) [data-app-composer]:not(:has([data-follow-up-composer])) > div:has(> div [data-promptbox-project-control]) {
+  :root:not([data-bui-off~="prompt"]) [data-new-thread-footer] {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
@@ -141,19 +141,19 @@
     box-shadow: var(--bui-shadow-soft);
   }
   :root:not([data-bui-off~="prompt"]) [data-follow-up-composer-footer] > div,
-  :root:not([data-bui-off~="prompt"]) [data-app-composer]:not(:has([data-follow-up-composer])) > div:has(> div [data-promptbox-project-control]) > div {
+  :root:not([data-bui-off~="prompt"]) [data-new-thread-footer] > div {
     display: contents;
   }
   :root:not([data-bui-off~="prompt"]) [data-follow-up-composer-footer] [data-promptbox-full-label],
-  :root:not([data-bui-off~="prompt"]) [data-app-composer]:not(:has([data-follow-up-composer])) > div:has(> div [data-promptbox-project-control]) [data-promptbox-full-label] {
+  :root:not([data-bui-off~="prompt"]) [data-new-thread-footer] [data-promptbox-full-label] {
     display: block !important;
   }
   :root:not([data-bui-off~="prompt"]) [data-follow-up-composer-footer] [data-promptbox-compact-label],
-  :root:not([data-bui-off~="prompt"]) [data-app-composer]:not(:has([data-follow-up-composer])) > div:has(> div [data-promptbox-project-control]) [data-promptbox-compact-label] {
+  :root:not([data-bui-off~="prompt"]) [data-new-thread-footer] [data-promptbox-compact-label] {
     display: none !important;
   }
   :root:not([data-bui-off~="prompt"]) [data-follow-up-composer-footer] button,
-  :root:not([data-bui-off~="prompt"]) [data-app-composer]:not(:has([data-follow-up-composer])) > div:has(> div [data-promptbox-project-control]) button {
+  :root:not([data-bui-off~="prompt"]) [data-new-thread-footer] button {
     width: 100%;
     min-width: 0;
     height: 28px;
@@ -191,7 +191,7 @@
 /* BB wraps fenced blocks in a card with a wrap/copy header. Keep that chrome:
    one hairline card, a 32px toolbar (language + chips), then the code flush
    underneath — not a second rounded pre nested inside the wrapper. */
-:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) {
+:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div.rounded-md.border.bg-surface-recessed {
   --bui-code-header: 32px;
   overflow: hidden;
   border-color: transparent;
@@ -199,7 +199,7 @@
   background-color: var(--bui-inset);
   box-shadow: 0 0 0 1px var(--bui-line);
 }
-:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child {
+:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] {
   align-items: center;
   height: var(--bui-code-header);
   min-height: var(--bui-code-header);
@@ -207,16 +207,16 @@
   border-bottom: 1px solid var(--bui-line);
   background-color: var(--bui-surface);
 }
-:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child > span {
+:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] > span {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--bui-ink-3);
 }
-:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child > span:empty::before {
+:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] > span:empty::before {
   content: "Code";
 }
-:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child button {
+:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] button {
   width: 24px;
   height: 24px;
   min-width: 24px;
@@ -227,15 +227,15 @@
     color 150ms ease,
     transform 150ms var(--bui-ease-out);
 }
-:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child button:active {
+:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] button:active {
   transform: scale(0.94);
 }
-:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child button[aria-pressed="true"] {
+:root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] button[aria-pressed="true"] {
   background-color: var(--bui-hover);
   color: var(--bui-ink);
 }
 @media (hover: hover) and (pointer: fine) {
-  :root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child button:hover {
+  :root:not([data-bui-off~="code"]) [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] button:hover {
     background-color: var(--bui-hover);
     color: var(--bui-ink);
   }
@@ -302,7 +302,7 @@
    the work rows' sans type and 22px rhythm. */
 /* Only log panels (a bordered box holding a <pre>): work groups share this sibling
    layout but already draw their own tree lines, and a second guide line doubles them. */
-:root:not([data-bui-off~="rows"]) [data-timeline-row-list] .group\/timeline-row + .grid > .overflow-hidden > div:has(> .rounded-lg.border pre) {
+:root:not([data-bui-off~="rows"]) [data-timeline-row-list] .group\/timeline-row + .grid > .overflow-hidden > div:has(> .rounded-lg.border) {
   margin-left: 14px;
   padding-left: 12px;
   padding-right: 0;
@@ -364,20 +364,20 @@
   87.5%, 100% { transform: translate(0, 5px); }
 }
 
-:root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child) > svg {
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title] > svg:has(~ span > .animate-shine:first-child) {
   display: none;
 }
-:root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child) {
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child) {
   position: relative;
 }
-:root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
   --bui-px-on: var(--bui-ink);
   content: "";
   flex-shrink: 0;
   width: 14px;
   height: 14px;
 }
-:root:not([data-bui-loader="bb"]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+:root:not([data-bui-loader="bb"]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
   --bui-px-on: var(--bui-ink);
   content: "";
   position: absolute;
@@ -390,9 +390,9 @@
   will-change: transform, opacity;
 }
 /* Drive (default): a lit column sweeps left to right across the grid. */
-:root:not([data-bui-loader]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before,
-:root[data-bui-loader="drive"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before,
-:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
+:root:not([data-bui-loader]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before,
+:root[data-bui-loader="drive"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before,
+:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
   background:
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 0px / 4px 4px no-repeat,
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 0px / 4px 4px no-repeat,
@@ -404,9 +404,9 @@
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 10px / 4px 4px no-repeat,
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 10px / 4px 4px no-repeat;
 }
-:root:not([data-bui-loader]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after,
-:root[data-bui-loader="drive"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after,
-:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+:root:not([data-bui-loader]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after,
+:root[data-bui-loader="drive"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after,
+:root[data-bui-loader="coins"]:not([data-bui-coins-ready]) [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
   background:
     linear-gradient(var(--bui-px-on) 0 0) 0px 0px / 4px 4px no-repeat,
     linear-gradient(var(--bui-px-on) 0 0) 0px 5px / 4px 4px no-repeat,
@@ -414,7 +414,7 @@
   animation: bui-drive 650ms linear infinite;
 }
 /* Dots: the same sweep with round pixels. */
-:root[data-bui-loader="dots"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
+:root[data-bui-loader="dots"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
   background:
     radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 0px 0px / 4px 4px no-repeat,
     radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 0px / 4px 4px no-repeat,
@@ -426,7 +426,7 @@
     radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 5px 10px / 4px 4px no-repeat,
     radial-gradient(closest-side, color-mix(in oklch, var(--bui-px-on) 15%, transparent) 90%, transparent) 10px 10px / 4px 4px no-repeat;
 }
-:root[data-bui-loader="dots"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+:root[data-bui-loader="dots"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
   background:
     radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 0px / 4px 4px no-repeat,
     radial-gradient(closest-side, var(--bui-px-on) 90%, transparent) 0px 5px / 4px 4px no-repeat,
@@ -434,7 +434,7 @@
   animation: bui-drive 650ms linear infinite;
 }
 /* Orbit: one lit pixel walks the edge; the centre stays dim. */
-:root[data-bui-loader="orbit"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
+:root[data-bui-loader="orbit"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
   background:
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 0px 0px / 4px 4px no-repeat,
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 0px / 4px 4px no-repeat,
@@ -446,7 +446,7 @@
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 5px 10px / 4px 4px no-repeat,
     linear-gradient(color-mix(in oklch, var(--bui-px-on) 15%, transparent) 0 0) 10px 10px / 4px 4px no-repeat;
 }
-:root[data-bui-loader="orbit"] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+:root[data-bui-loader="orbit"] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
   background: linear-gradient(var(--bui-px-on) 0 0) 0px 0px / 4px 4px no-repeat;
   animation: bui-orbit 950ms linear infinite;
 }
@@ -458,12 +458,12 @@
 @property --bui-coin-t { syntax: "<number>"; inherits: false; initial-value: 0; }
 @property --bui-coin-color { syntax: "<color>"; inherits: false; initial-value: #fff; }
 @keyframes bui-coin-t { to { --bui-coin-t: 1; } }
-:root[data-bui-loader="coins"][data-bui-coins-ready] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
+:root[data-bui-loader="coins"][data-bui-coins-ready] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
   --bui-coin-color: var(--bui-ink);
   background: paint(bui-coins);
   animation: bui-coin-t 10.472s linear infinite;
 }
-:root[data-bui-loader="coins"][data-bui-coins-ready] [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+:root[data-bui-loader="coins"][data-bui-coins-ready] [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
   content: none;
 }
 
@@ -489,10 +489,11 @@
 }
 
 /* ── Streaming caret (streamingCaret): trails the reply while the run is live ── */
-:root:not([data-bui-off~="caret"]) #thread-detail-timeline-panel:has([data-promptbox-submit-action]:is([aria-label="Stop run"], [aria-label^="Steer current run"]))
+/* run-state.ts sets data-bui-run on the timeline panel while its run is live. */
+:root:not([data-bui-off~="caret"]) #thread-detail-timeline-panel[data-bui-run]
   [data-timeline-row-list="top-level"] > [data-timeline-row-id*=":assistant:"]:last-child [data-markdown-preview]
   > :is(p, h1, h2, h3, h4, h5, h6):last-child::after,
-:root:not([data-bui-off~="caret"]) #thread-detail-timeline-panel:has([data-promptbox-submit-action]:is([aria-label="Stop run"], [aria-label^="Steer current run"]))
+:root:not([data-bui-off~="caret"]) #thread-detail-timeline-panel[data-bui-run]
   [data-timeline-row-list="top-level"] > [data-timeline-row-id*=":assistant:"]:last-child [data-markdown-preview]
   > :is(ul, ol):last-child > li:last-child::after {
   content: "";
@@ -560,7 +561,8 @@
 }
 
 /* ── Selection pill (selectionPill): Add to chat / Reply in side chat ───────── */
-:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"]:has(> div > button > svg[data-icon="MessageSquarePlus"]) {
+/* TimelineSelectionMenu is the only popover BB renders with this class set. */
+:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"].pointer-events-auto.w-auto.bg-popover {
   --tw-enter-scale: 0.96;
   gap: 2px;
   padding: 4px;
@@ -574,7 +576,7 @@
   animation-duration: 180ms;
   animation-timing-function: var(--bui-ease-out);
 }
-:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"]:has(> div > button > svg[data-icon="MessageSquarePlus"]) button {
+:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"].pointer-events-auto.w-auto.bg-popover button {
   height: 28px;
   gap: 4px;
   padding: 0 10px;
@@ -584,34 +586,32 @@
     background-color 150ms ease,
     transform 150ms var(--bui-ease-out);
 }
-:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"]:has(> div > button > svg[data-icon="MessageSquarePlus"]) button:hover {
+:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"].pointer-events-auto.w-auto.bg-popover button:hover {
   background-color: var(--bui-hover);
 }
-:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"]:has(> div > button > svg[data-icon="MessageSquarePlus"]) button:active {
+:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"].pointer-events-auto.w-auto.bg-popover button:active {
   transform: scale(0.96);
 }
-:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"]:has(> div > button > svg[data-icon="MessageSquarePlus"]) span[aria-hidden="true"] {
+:root:not([data-bui-off~="selection"]) [data-radix-popper-content-wrapper] > [role="dialog"].pointer-events-auto.w-auto.bg-popover span[aria-hidden="true"] {
   background-color: var(--bui-line-strong);
 }
 
 /* ── Composer banners (mergedBanners): one card instead of a stack ──────────── */
 /* BB gives each banner above the composer (background commands, git, parent and
    child threads) its own bordered card, 8px apart. The banners keep their own
-   boxes here and join into one card: gaps close, shared edges collapse onto each
-   other, and only the outer corners round. The chrome stays on the banners rather
-   than the stack, so anything else in there (a plugin strip) keeps its own space
-   instead of becoming an empty row, and nothing is clipped. */
-:root:not([data-bui-off~="banners"]) [data-app-composer] > div.grid:has(> section[aria-label]) {
-  gap: 0;
-}
+   boxes here and join into one card: each banner that follows another pulls up
+   over BB's gap-2, shared edges collapse onto each other, and only the outer
+   corners round. The chrome stays on the banners rather than the stack, so
+   anything else in there (a plugin strip) keeps BB's spacing, and nothing is
+   clipped. */
 :root:not([data-bui-off~="banners"]) [data-app-composer] > div.grid > section[aria-label] {
   border: 1px solid var(--bui-line);
   border-radius: 0;
   background-color: var(--bui-surface);
   box-shadow: none;
 }
-:root:not([data-bui-off~="banners"]) [data-app-composer] > div.grid > section[aria-label]:not(:first-of-type) {
-  margin-top: -1px;
+:root:not([data-bui-off~="banners"]) [data-app-composer] > div.grid > section[aria-label] + section[aria-label] {
+  margin-top: calc(-0.5rem - 1px);
 }
 :root:not([data-bui-off~="banners"]) [data-app-composer] > div.grid > section[aria-label]:first-of-type {
   border-top-left-radius: var(--bui-radius-card);
@@ -621,34 +621,31 @@
   border-bottom-left-radius: var(--bui-radius-card);
   border-bottom-right-radius: var(--bui-radius-card);
 }
-/* Anything that is not a banner keeps the stack's original spacing. */
-:root:not([data-bui-off~="banners"]) [data-app-composer] > div.grid:has(> section[aria-label]) > :not(section[aria-label]):not([data-bb-plugin-root]) {
-  margin-block: 8px;
-}
 
 /* ── Minimize while running (minimizeWhileRunning) ───────────────────────────── */
 /* While a response is generating, the prompt box drops to BB's own one-line compact
    layout, freeing room for the reply. These are BB's compact-composer rules with
-   the trigger swapped for the send button: "Stop run" means a run is live and the
-   box is empty. Typing a follow-up flips it to "Steer current run", so the box
-   grows back as soon as you type, focused or not; voice input keeps the full box. */
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) {
+   the trigger swapped for the send button, which run-state.ts mirrors onto the
+   composer as data-bui-run: "stop" means a run is live and the box is empty.
+   Typing a follow-up flips it to "steer", so the box grows back as soon as you
+   type, focused or not; voice input keeps the full box. */
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) {
   overflow: hidden;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-action-row] {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-action-row] {
   inset-block: 0;
   gap: 0;
   padding: 0;
   position: absolute;
   right: .5rem;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-main] {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-main] {
   height: 3rem;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-expanded-only] {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-expanded-only] {
   display: none!important;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-scroll] {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-scroll] {
   padding-top: 0;
   padding-bottom: 0;
   padding-right: 3.5rem;
@@ -657,12 +654,12 @@
   min-height: 3rem!important;
   max-height: 3rem!important;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] {
   align-items: center;
   height: 100%;
   display: flex;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] {
   text-overflow: ellipsis;
   width: 100%;
   max-height: 1.7em;
@@ -670,8 +667,8 @@
   white-space: nowrap!important;
   min-height: 0!important;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable]>*,
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] :where(blockquote,
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable]>*,
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] :where(blockquote,
 h1,
 h2,
 h3,
@@ -693,24 +690,24 @@ ul) {
   list-style: none;
   display: inline;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable]>*+:before,
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] :where(blockquote,
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable]>*+:before,
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] :where(blockquote,
 li)>*+:before,
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] :where(ol,
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] :where(ol,
 ul)>li+li:before {
   content: " ";
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] br {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] br {
   content: " ";
   display: inline;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] br:after {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror[contenteditable] br:after {
   content: " ";
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .prompt-mention-pill>span:last-child {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .prompt-mention-pill>span:last-child {
   min-width: 0;
 }
-:root:not([data-bui-off~="minimize"]) [data-follow-up-composer]:has([data-promptbox-submit-action][aria-label="Stop run"]) [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror p.is-editor-empty:first-child:before {
+:root:not([data-bui-off~="minimize"]) [data-follow-up-composer][data-bui-run="stop"] [data-promptbox]:not([data-promptbox-voice-active]) [data-promptbox-editor-content] .ProseMirror p.is-editor-empty:first-child:before {
   content: var(--promptbox-container-compact-placeholder);
 }
 
@@ -720,8 +717,7 @@ ul)>li+li:before {
    the full height of every row but the last; each row adds only the rounded curve
    into its icon (centred 12px down), so strokes never stack. Colours are opaque
    (ink mixed into the background) for the same reason: where lines meet, nothing
-   darkens. The running row is the current node: its curve and the trunk leading
-   down to it from the header are lit. */
+   darkens. The running row is the current node: its curve is lit. */
 :root:not([data-bui-off~="tree"]) [data-timeline-row-list="bundle"] {
   --bui-tree-dim: color-mix(in oklch, var(--ink) 22%, var(--background));
   --bui-tree-lit: color-mix(in oklch, var(--ink) 72%, var(--background));
@@ -769,12 +765,10 @@ ul)>li+li:before {
   top: -4px;
   height: 16px;
 }
-/* Current node: the running row's curve, and the path above it, light up. */
+/* Current node: the running row's curve lights up. Each :has() here looks only inside
+   its own row, so a change in one row never re-matches its siblings. */
 :root:not([data-bui-off~="tree"]) [data-timeline-row-list="bundle"] > [data-timeline-row-id]:has(.animate-shine)::before {
   border-color: var(--bui-tree-lit);
-}
-:root:not([data-bui-off~="tree"]) [data-timeline-row-list="bundle"] > [data-timeline-row-id]:has(~ [data-timeline-row-id] .animate-shine)::after {
-  background: var(--bui-tree-lit);
 }
 :root:not([data-bui-off~="tree"]) [data-timeline-row-list="bundle"] > [data-timeline-row-id]:has(.animate-shine):not(:last-child)::after {
   background: linear-gradient(var(--bui-tree-lit) 0 12px, var(--bui-tree-dim) 12px);
@@ -798,15 +792,15 @@ ul)>li+li:before {
   margin-bottom: -8px;
   overflow: hidden;
 }
-:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"]:has(+ [data-timeline-row-id] .group\/timeline-row) + [data-timeline-row-id] .group\/timeline-row {
+:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"] + [data-timeline-row-id] .group\/timeline-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
-:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"]:has(+ [data-timeline-row-id] .group\/timeline-row) + [data-timeline-row-id] .group\/timeline-row > button {
+:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"] + [data-timeline-row-id] .group\/timeline-row > button {
   order: 0;
 }
-:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"]:has(+ [data-timeline-row-id] .group\/timeline-row) + [data-timeline-row-id] .group\/timeline-row::after {
+:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"] + [data-timeline-row-id] .group\/timeline-row::after {
   order: 1;
   content: "NEW";
   color: var(--success);
@@ -816,11 +810,11 @@ ul)>li+li:before {
   line-height: 20px;
 }
 /* Compact work rows off: BB's own 14px label size. */
-:root[data-bui-off~="rows"]:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"]:has(+ [data-timeline-row-id] .group\/timeline-row) + [data-timeline-row-id] .group\/timeline-row::after {
+:root[data-bui-off~="rows"]:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"] + [data-timeline-row-id] .group\/timeline-row::after {
   font-size: 14px;
 }
 /* Expanded details keep their own line under the label. */
-:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"]:has(+ [data-timeline-row-id] .group\/timeline-row) + [data-timeline-row-id] .group\/timeline-row > .grid {
+:root:not([data-bui-off~="unread"]) [data-timeline-window-key^="divider:"] + [data-timeline-row-id] .group\/timeline-row > .grid {
   order: 2;
   flex-basis: 100%;
 }
@@ -873,15 +867,15 @@ ul)>li+li:before {
 @media (prefers-reduced-motion: reduce) {
   [data-promptbox] [data-promptbox-submit-action]:not(:disabled):active,
   [data-promptbox-action-row] button:not([data-promptbox-submit-action]):active,
-  [data-radix-popper-content-wrapper] > [role="dialog"]:has(> div > button > svg[data-icon="MessageSquarePlus"]) button:active,
+  [data-radix-popper-content-wrapper] > [role="dialog"].pointer-events-auto.w-auto.bg-popover button:active,
   section[data-testid$="-banner"] button.inline-flex.whitespace-nowrap:not(:disabled):active,
-  [data-timeline-row-list] [data-markdown-preview] div:has(> pre.bb-code-highlight) > div:first-child button:active {
+  [data-timeline-row-list] [data-markdown-preview] [data-clipboard-ignore] button:active {
     transform: none;
   }
-  [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::before {
+  [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::before {
     animation: none !important;
   }
-  [data-timeline-row-list] .group\/timeline-row > button > span > span:has(> span > .animate-shine:first-child)::after {
+  [data-timeline-row-list] [data-timeline-row-title]:has(> span > .animate-shine:first-child)::after {
     content: none;
   }
   section[data-testid="approval-banner"],
